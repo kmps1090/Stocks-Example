@@ -1,3 +1,14 @@
 ```{python}
 2 + 2
 ```
+
+```{python}
+import pandas as pd
+import numpy as mp
+import seaborn as sns
+
+wide_data = pd.read_csv(('wide_data.csv'), parse_dates=['date'])
+
+
+
+```
