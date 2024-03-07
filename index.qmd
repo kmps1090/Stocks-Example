@@ -1,21 +1,22 @@
 # Tarea Final Intro Data Science.
 
- El codigo abajo muestra un "candle stick" normalmente utilizado para analizar el mercado bursatil, entre otros basado en data historica, Yahoo provee una libreria para obtener esa informacion publica, refierance a este [ENLACE](https://python-graph-gallery.com/) de donde he elaborado el sig codigo.
+### El codigo abajo muestra un "candle stick" normalmente utilizado para analizar el mercado bursatil, entre otros, esto basado en data historica, Yahoo provee una libreria para obtener esa informacion publica, favor referirse a este [ENLACE](https://python-graph-gallery.com/) de donde he elaborado el sig codigo:
 
+Primero instalammos la libreria de Yahoo Finance y plotly graph objects:
 ```{python}
-# Instalammos la libreria de Yahoo Finance y plotly graph objects:
+
 import yfinance as yf
 import plotly.graph_objects as go
 ```
 
- Definimos el Simbolo de la accion por ejemplo Google(GOOGL, todos los codigos los encontramos en Yahoo FInance) y el rango de fechas:
+Definimos el Simbolo de la accion por ejemplo Google(GOOGL, todos los codigos los encontramos en Yahoo FInance) y el rango de fechas:
 ```{python}
 stock_symbol = ['GOOGL']
 start_date = '2024-01-01'
 end_date = '2024-03-05'
 ```
 
- Cargamos los datos historicos y definimos los ejes del grafico segun el enlace compartido inicialmente:
+Cargamos los datos historicos y definimos los ejes del grafico segun el enlace compartido inicialmente:
 ```{python}
 stock_data = yf.download(stock_symbol,
                          start=start_date, end=end_date)
@@ -27,10 +28,66 @@ fig = go.Figure(data=[go.Candlestick(
                 close = stock_data['Close'])])
 ```
 
- Definimos las dimensiones del diseno:
+Definimos los titulos:
+```{python}
+fig.update_layout(title='Candlestick Chart - Stocks',
+                  xaxis_title='Date',
+                  yaxis_title='Stock Price',
+                  xaxis_rangeslider_visible=False)
+```
+
+Definimos las dimensiones del diseno:
 ```{python}
 fig.update_layout(
     autosize=False,
     width=700,
     height=500)
 ```
+
+### En este otro codigo, queremos ver multiples simbolos en el mismo grafico, para eso, utilizamos pandas para un poco de "Data Wrangling", observen el codigo completo con las diferencias en los comentarios (###)
+
+```{python}
+import yfinance as yf
+import pandas as pd # Observamos a Pandas como parte de las librerias a llamar.
+import plotly.graph_objects as go
+
+stock_symbol = ['GOOGL', 'AAPL'] # Hemos agregado Apple en los simbolos a descargar.
+start_date = '2024-01-01'
+end_date = '2024-03-05'
+
+# Creamos un dataframe vacio para luego dejar los datos que necesitamos en esta variable.
+stock_dataframes = []
+
+for symbol in stock_symbol: # usamos la funcion "for" e identamos correctamente para que el circuito se repita la cantidad de Stock Symbols que agregamos al codigo
+
+    data = yf.download(symbol, start=start_date, end=end_date)
+
+    # Agregamos la data que bajamos a el dataframe vacio que creamos con anterioridad. 
+    stock_dataframes.append(data)
+
+# Combinamos la data de cada cosigo con Pandas y la funcion concat.
+combined_data = pd.concat(stock_dataframes, keys=stock_symbol, names=['Symbol', 'Date'])
+
+
+fig = go.Figure()
+for symbol in stock_symbol: # usamos la funcion "for" para plotear las veces necesarias
+    symbol_data = combined_data.loc[symbol]
+    fig.add_trace(go.Candlestick(x=symbol_data.index,
+                                 open=symbol_data['Open'],
+                                 high=symbol_data['High'],
+                                 low=symbol_data['Low'],
+                                 close=symbol_data['Close'],
+                                 name=symbol))
+
+fig.update_layout(title='Candlestick Chart - Stocks(notese la funcionalidad tipo filtro en los simbolos de la derecha al hacerles click)',
+                  xaxis_title='Date',
+                  yaxis_title='Stock Price',
+                  xaxis_rangeslider_visible=False)
+
+fig.update_layout(
+    autosize=False,
+    width=700,
+    height=500)
+```
+
+## FIN
