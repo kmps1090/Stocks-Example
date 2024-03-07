@@ -1,14 +1,36 @@
+# Tarea Final Intro Data Science.
+
+ El codigo abajo muestra un "candle stick" normalmente utilizado para analizar el mercado bursatil, entre otros basado en data historica, Yahoo provee una libreria para obtener esa informacion publica, refierance a este [ENLACE]() de donde he elaborado el sig codigo.
+
 ```{python}
-2 + 2
+# Instalammos la libreria de Yahoo Finance y plotly graph objects:
+import yfinance as yf
+import plotly.graph_objects as go
 ```
 
+ Definimos el Simbolo de la accion por ejemplo Google(GOOGL, todos los codigos los encontramos en Yahoo FInance) y el rango de fechas:
 ```{python}
-import pandas as pd
-import numpy as mp
-import seaborn as sns
+stock_symbol = ['GOOGL']
+start_date = '2024-01-01'
+end_date = '2024-03-05'
+```
 
-wide_data = pd.read_csv(('wide_data.csv'), parse_dates=['date'])
+ Cargamos los datos historicos y definimos los ejes del grafico segun el enlace compartido inicialmente:
+```{python}
+stock_data = yf.download(stock_symbol,
+                         start=start_date, end=end_date)
+fig = go.Figure(data=[go.Candlestick(
+                x = stock_data.index, # date values
+                open = stock_data['Open'],
+                high = stock_data['High'],
+                low = stock_data['Low'],
+                close = stock_data['Close'])])
+```
 
-
-
+ Definimos las dimensiones del diseno:
+```{python}
+fig.update_layout(
+    autosize=False,
+    width=700,
+    height=500)
 ```
