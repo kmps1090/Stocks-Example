@@ -26,18 +26,13 @@ fig = go.Figure(data=[go.Candlestick(
                 high = stock_data['High'],
                 low = stock_data['Low'],
                 close = stock_data['Close'])])
-```
 
-Definimos los titulos:
-```{python}
+#Definimos los titulos:
 fig.update_layout(title='Candlestick Chart - Stocks',
                   xaxis_title='Date',
                   yaxis_title='Stock Price',
-                  xaxis_rangeslider_visible=False)
-```
-
-Definimos las dimensiones del diseno:
-```{python}
+                  xaxis_rangeslider_visible=True)
+#Definimos las dimensiones del diseno:
 fig.update_layout(
     autosize=False,
     width=700,
@@ -58,7 +53,8 @@ end_date = '2024-03-05'
 # Creamos un dataframe vacio para luego dejar los datos que necesitamos en esta variable.
 stock_dataframes = []
 
-for symbol in stock_symbol: # usamos la funcion "for" e identamos correctamente para que el circuito se repita la cantidad de Stock Symbols que agregamos al codigo
+for symbol in stock_symbol: 
+# usamos la funcion "for" e identamos para que el circuito se repita la cantidad de Stock Symbols que agregamos al codigo
 
     data = yf.download(symbol, start=start_date, end=end_date)
 
@@ -79,10 +75,10 @@ for symbol in stock_symbol: # usamos la funcion "for" para plotear las veces nec
                                  close=symbol_data['Close'],
                                  name=symbol))
 
-fig.update_layout(title='Candlestick Chart - Stocks(notese la funcionalidad tipo filtro en los simbolos de la derecha al hacerles click)',
+fig.update_layout(title='Candlestick Chart - Stocks(notese los filtros en los simbolos de la derecha al hacerles click)',
                   xaxis_title='Date',
                   yaxis_title='Stock Price',
-                  xaxis_rangeslider_visible=False)
+                  xaxis_rangeslider_visible=True)
 
 fig.update_layout(
     autosize=False,
@@ -91,3 +87,4 @@ fig.update_layout(
 ```
 
 ## FIN
+Diego Campos
